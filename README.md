@@ -2,7 +2,7 @@
 
 ## Откуда взялись данные?
 
-Kaggle крут не только своими соревнованиями, но и своим комньюнити. <a href="https://www.kaggle.com/mkechinov">*Michael Kechinov*<a/> выложил огромный датасет (13.67 GB) c данными о ивентов пользователей на ecommerce сайте. Я взял часть этих данных за октябрь (5.26 GB), поскольку у меня нет кластера компьютеров, чтобы обработать все данные. <a href="https://www.kaggle.com/mkechinov/ecommerce-behavior-data-from-multi-category-store">Ссылка на датасет<a/>
+Kaggle крут не только своими соревнованиями, но и своим комньюнити. <a href="https://www.kaggle.com/mkechinov">*Michael Kechinov*<a/> выложил огромный датасет (13.67 GB) c данными о ивентов пользователей на ecommerce сайте. Я взял только часть этих данных за октябрь (5.26 GB), поскольку у меня нет кластера компьютеров, чтобы обработать все данные. <a href="https://www.kaggle.com/mkechinov/ecommerce-behavior-data-from-multi-category-store">Ссылка на датасет<a/>
 
 ## Отбор нужных ивентов
 
@@ -45,7 +45,7 @@ dtype: float64
 
 <img src='img/log_cropped_head.png'/> 
 
-Сейчас данные в формате лога. Такого числа в сколько-то секунд пользователь с айди такой-то купил определенный смарфон. Преобразуем лог в *RFM* вид, для анализа пользователей. Начнем с даты.
+Сейчас данные в формате лога. Такого числа в столько-то секунд пользователь с айди такой-то купил определенный смарфон. Преобразуем лог в *RFM* вид, для анализа пользователей. Начнем с даты.
 
 От часов, минут и секунд в фичи `event_time` можно избавиться, поскольку в нашем случае они не сыграют огромной роли.
 
@@ -59,6 +59,12 @@ smartphones['event_time'] = smartphones['event_time'] \
 
 smartphones = smartphones.rename(columns={'event_time': 'event_date'})
 ```
+
+|Было|Стало|
+|---|---|
+| <img src='img/log_cropped_head_cropped.png'/> | <img src='img/delete_time_cropped.png'/> |
+
+Полный вывод:
 <img src='img/delete_time.png'/> 
 
 `category_id` и `event_type` уже не понадобятся, дропнем их.
