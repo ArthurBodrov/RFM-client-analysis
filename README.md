@@ -160,3 +160,88 @@ users = users.drop('last_ordered_date', axis=1)
 
 Все готов для RFM. Наведем красоту: переименуем колонки, упорядочим, уберем точку из значений, закастив их к типу `int`. И получим такой результат:
 <img src='img/rfm.png'/> 
+
+## Визуализация
+
+Посмотрим на распределение и выбросы фич. Отобразим гистограмму, QQPlot и Boxplot.
+
+<img src='img/hist.png'/> 
+<img src='img/qqplot.png'/> 
+<img src='img/boxplot.png'/> 
+
+Распределение ненормальное и много выбросов у `Recency` и `Monetary`. 
+
+## Скалирование величин.
+У многих алгоритмы кластеризации под капотом вычисляют дистанции (Euclidean, Manhattan). Поэтому скалирование величин **обязательный** гость программы.
+
+Я буду использовать `StandardScaler`, поскольку потом я собираюсь удалить выбросы. 
+
+```python
+from sklearn.preprocessing import StandardScaler
+
+scaler = StandardScaler()
+
+for column in rfm.columns:
+    rfm[column] = scaler.fit_transform(rfm[[column]])
+
+rfm_scaled = rfm.copy()
+```
+
+<img src='img/scaled.png'/> 
+
+## Удаление выбросов.
+
+`StandardScaler` это тоже самое, что и z-score. По правилу трех сигм, наблюдения, которые лежат дальше +-3$\sigma$ - выбросы.
+
+```python
+for column in rfm.columns:
+    rfm_scaled = rfm_scaled[(rfm_scaled[column] < 3) & (rfm_scaled[column] > -3)]
+```
+
+После скалирование распределение стало лучше.
+<img src='img/scaled_hist.png'/> 
+
+В 3d проекции данные выглядят так:
+
+<img src='img/3d.png'/> 
+
+## Тренировка модели
+
+В качестве модели, я буду использовать простой и быстрый алгоритм Kmeans.
+
+Для нахождения количества кластеров, я воспользую методом `Elbow`.
+
+```python
+results = []
+range_clust = range(2, 15)
+
+for num in range_clust:
+    kmeans = KMeans(n_clusters=num)
+    kmeans.fit(rfm_scaled)
+    
+    results.append({'N_clusters': num, 'Inertia': kmeans.inertia_})
+results = pd.DataFrame(results)
+```
+
+Результат получился такой:
+
+<img src='img/elbow_curve.png'/> 
+
+***По методу Elbow выбираем ответ 4.*** <img src='https://miro.medium.com/max/1400/1*eVyOdx4gIcGWQ3lF4xAu6g.png' width='400' heigh='200'/>
+
+
+```python
+kmeans_elbow = KMeans(n_clusters=4)
+kmeans_elbow.fit(rfm_scaled)
+
+rfm_scaled['Cluster_id'] = kmeans_elbow.labels_
+
+# Прибавляю 1, чтобы счет начинался с 1 кластера, не с 0 кластера 
+rfm_scaled['Cluster_id'] = rfm_scaled['Cluster_id'] + 1
+```
+
+<img src='img/clusters.png'/> 
+
+## Визуализация кластеризации
+
+<img src='img/сluster_boxplot.png'/> 
