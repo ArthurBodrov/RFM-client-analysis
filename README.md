@@ -191,7 +191,7 @@ rfm_scaled = rfm.copy()
 
 ## Удаление выбросов.
 
-`StandardScaler` это тоже самое, что и z-score. По правилу трех сигм, наблюдения, которые лежат дальше +-3$\sigma$ - выбросы.
+`StandardScaler` это тоже самое, что и z-score. По правилу трех сигм, наблюдения, которые лежат дальше +-3σ, это выбросы.
 
 ```python
 for column in rfm.columns:
@@ -236,7 +236,7 @@ kmeans_elbow.fit(rfm_scaled)
 
 rfm_scaled['Cluster_id'] = kmeans_elbow.labels_
 
-# Прибавляю 1, чтобы счет начинался с 1 кластера, не с 0 кластера 
+# Прибавляю 1, чтобы счет начинался с 1 кластера, не с нулевого кластера 
 rfm_scaled['Cluster_id'] = rfm_scaled['Cluster_id'] + 1
 ```
 
