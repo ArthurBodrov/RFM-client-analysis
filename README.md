@@ -174,8 +174,8 @@ for index, value in zipped_amount:
 
 <details>
 <summary>Код визуализации</summary>
-```python
 
+```python
 fig, axes = plt.subplots(1, 3)
 rec_hist = sns.distplot(ax=axes[0], a=rfm['Recency'], kde=True)
 rec_hist.set_title('Distribution of `Recency`')
