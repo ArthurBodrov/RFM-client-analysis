@@ -210,7 +210,7 @@ mon_box.set_title('Boxplot of `Monetary`');
 <img src='img/qqplot.png'/> 
 <img src='img/boxplot.png'/> 
 
-Распределение ненормальное и много выбросов у `Recency` и `Monetary`. 
+Распределение ненормальное и присутствует много выбросов у `Recency` и `Monetary`. 
 
 ## Скалирование величин.
 У многих алгоритмы кластеризации под капотом вычисляют дистанции (Euclidean, Manhattan). Поэтому скалирование величин **обязательный** гость программы.
@@ -277,13 +277,39 @@ kmeans_elbow.fit(rfm_scaled)
 
 rfm_scaled['Cluster_id'] = kmeans_elbow.labels_
 
-# Прибавляю 1, чтобы счет начинался с 1 кластера, не с нулевого кластера 
+# Прибавляю 1, чтобы счет начинался с 1 кластера, а не с нулевого кластера 
 rfm_scaled['Cluster_id'] = rfm_scaled['Cluster_id'] + 1
 ```
 
 <img src='img/clusters.png'/> 
 
 ## Визуализация кластеризации
+
+<details>
+<summary>Код визуализации</summary>
+
+```python
+fig, axes = plt.subplots(1,3)
+
+rec_cluster = sns.boxplot(ax=axes[0], x='Cluster_id', y='Recency', data=rfm_scaled);
+rec_cluster.set_title("Clustered `Recency` boxplot")
+freq_cluster = sns.boxplot(ax=axes[1], x='Cluster_id', y='Frequency', data=rfm_scaled);
+freq_cluster.set_title("Clustered `Frequency` boxplot")
+mon_cluster = sns.boxplot(ax=axes[2], x='Cluster_id', y='Monetary', data=rfm_scaled);
+mon_cluster.set_title("Clustered `Monetary` boxplot");
+
+
+fig, axes = plt.subplots(1,3)
+
+rec_cluster = sns.barplot(ax=axes[0], x='Cluster_id', y='Recency', data=rfm_scaled);
+rec_cluster.set_title("Clustered `Recency` barplot")
+freq_cluster = sns.barplot(ax=axes[1], x='Cluster_id', y='Frequency', data=rfm_scaled);
+freq_cluster.set_title("Clustered `Frequency` barplot")
+mon_cluster = sns.barplot(ax=axes[2], x='Cluster_id', y='Monetary', data=rfm_scaled);
+mon_cluster.set_title("Clustered `Monetary` barplot");
+
+```
+</details>
 
 <img src='img/сluster_boxplot.png'/> 
 
@@ -311,6 +337,6 @@ rfm_scaled['Cluster_id'] = rfm_scaled['Cluster_id'] + 1
 
 Также возможно, что этот кластер - оптовики, розничные продавцы покупающие большие партии, и чтобы улучшить отношения с ними, нужно рассмотреть отдельный ценовую политику для них, чтобы это было выгодно, как и для нас, так и для них.
 
-**Четвертый кластер.** В нем я бы попытался увеличит средний чек с помощью групповых продаж. Например, телевизор стоит 40 тысяч рублей, приставка к нему 25 тысяч, общая сумма 65 тысяч. Но по специальному предложению они вместе будут стоит 58 тысяч.
+**Четвертый кластер.** В нем я бы попытался увеличит средний чек с помощью групповых продаж. Например, телевизор стоит 40 тысяч рублей, приставка к нему 25 тысяч, общая сумма 65 тысяч. Но по специальному предложению они вместе будут стоит 58 тысяч. **Примечание:** Такие продажи для нас тоже должны быть выгодны.
 
-**Примечание:** Такие продажи для нас тоже должны быть выгодны.
+## Советы по улучшению
