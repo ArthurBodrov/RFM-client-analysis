@@ -119,17 +119,18 @@ Recency = `current_date` - `last_ordered_date`.
 
 Найдем дату последней покупки у каждого пользователя.
 
-# Переделать. Доделать до конца, а после переходить к след метрике.
 ```python
 last_ordered_date = smartphones.groupby(['user_id'])['event_date'].agg('max')
 
 zipped_last_ordered_date = zip(n_orders.index, n_orders.values)
 
 for index, value in zipped_last_ordered_date:
-    users.loc[users['user_id'] == index, 'last_ordered_date'] = value
+    users.loc[users['user_id'] == index, 'order_time_offset'] = value - 20191031
 ```
 
-<img src='img/last_ordered_float_head.png'/> 
+<img src='img/order_time_offset.png'/> 
+
+**F**requency - кол-во покупок.
 
 Вычислим количество, сделанных покупок каждым пользователем.
 
@@ -143,6 +144,8 @@ for index, value in zipped_n_orders:
 ```
 
 <img src='img/n_orders.png'/> 
+
+**M**onetary - сумма сделок&
 
 Просуммируем цены заказов, чтобы получить `Monetary`.
 
