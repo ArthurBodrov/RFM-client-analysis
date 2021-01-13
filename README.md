@@ -9,7 +9,7 @@
 
 ## Откуда взялись данные?
 
-Kaggle крут не только своими соревнованиями, но и своим комньюнити. <a href="https://www.kaggle.com/mkechinov">*Michael Kechinov*<a/> выложил огромный датасет (13.67 GB) c данными о ивентов пользователей на ecommerce сайте. Я взял только часть этих данных за октябрь (5.26 GB), поскольку у меня нет кластера компьютеров, чтобы обработать все данные. <a href="https://www.kaggle.com/mkechinov/ecommerce-behavior-data-from-multi-category-store">Ссылка на датасет<a/>
+Kaggle крут не только своими соревнованиями, но и своим комньюнити. <a href="https://www.kaggle.com/mkechinov">*Michael Kechinov*<a/> выложил огромный датасет (13.67 GB) c данными о ивентов пользователей на ecommerce сайте Поскольку у меня нет кластера компьютеров, чтобы обработать все данные, я взял только часть этих данных за октябрь (5.26 GB). <a href="https://www.kaggle.com/mkechinov/ecommerce-behavior-data-from-multi-category-store">Ссылка на датасет<a/>
 
 ## Отбор нужных ивентов
 
